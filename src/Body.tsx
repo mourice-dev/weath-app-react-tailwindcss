@@ -3,6 +3,7 @@
 import React from "react";
 import Grid from "./Grid";
 import search from "./assets/images/icon-search.svg";
+import loading from "./assets/images/icon-loading.svg";
 
 function Body() {
   return (
@@ -13,17 +14,17 @@ function Body() {
         </p>
       </div>
       <div className='pt-8'>
-        <div className='flex justify-center items-center text-center gap-4'>
+        <div className='md:flex justify-center items-center text-center gap-4'>
           <div
-            className='flex justify-between 
+            className='relative flex justify-between 
                   items-center text-center gap-3
-                   bg-Neutral-700 py-2   px-5
-                   w-[350px]
+                   bg-Neutral-700 py-2   md:px-5
+                   md:w-[350px]
                    focus-within:ring-1
                    focus-within:ring-white
                    focus-within:border-white
                     rounded-md'>
-            <img src={search} alt='' className='h-4' />
+            <img src={search} alt='' className='ml-2 md:ml-0 h-4' />
             <input
               type='text'
               name=''
@@ -32,10 +33,23 @@ function Body() {
               className='bg-transparent outline-none text-white 
                           placeholder:text-Neutral-300 w-full text-sm'
             />
+            {/* <div className=' absolute flex justify-start items-center text-center w-full h-10 bg-Neutral-700 left-0 mt-23 rounded-md z-3'>
+              <img src={loading} alt='' className='h-4 px-2' />{" "}
+              <p className='text-xs text-white'>Searching in progress...</p>
+            // </div> */}
+            <div className=' absolute bg-Neutral-700 flex p-1 flex-col justify-start items-center text-left w-full min-h-10 bg-Neutral-700 left-0 mt-30 rounded-md z-3 cursor-pointer'>
+              <p className=' bg-Neutral-700 w-full py-2 px-2 mx-4 text-xs hover:border-1 hover:bg-Neutral-600 hover:border-Neutral-800 text-white rounded-md'>
+                Searching in progress...
+              </p>
+              <p className=' bg-Neutral-700 w-full py-2 px-2 mx-4 text-xs hover:border-1 hover:bg-Neutral-600 hover:border-Neutral-800 text-white rounded-md'>
+                Searching in progress...
+              </p>
+            </div>
           </div>
 
           <div
-            className='bg-blue-500 rounded-md text-white cursor-pointer
+            className='bg-blue-500 rounded-md text-white cursor-pointer mt-3 md:mt-0
+           
           '>
             <button className='text-sm py-2 px-3 cursor-pointer '>
               Search
