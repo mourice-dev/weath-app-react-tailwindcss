@@ -6,6 +6,20 @@ import search from "./assets/images/icon-search.svg";
 import loading from "./assets/images/icon-loading.svg";
 
 function Body() {
+  const searchingBar = document.getElementById("searchingBar");
+  const historyItems = document.getElementById("historyItems");
+  searchingBar?.addEventListener("click", () => {
+    if(historyItems.classList.contains("hidden")){
+    historyItems?.classList.remove("hidden");
+  }
+  else{
+    historyItems?.classList.add("hidden");
+    
+  }
+  });
+
+
+
   return (
     <div className='flex-col justify-center items-center text-center'>
       <div>
@@ -15,7 +29,8 @@ function Body() {
       </div>
       <div className='pt-8'>
         <div className='md:flex justify-center items-center text-center gap-4'>
-          <div
+          <div 
+            id="searchingBar"
             className='relative flex justify-between 
                   items-center text-center gap-3
                    bg-Neutral-700 py-2   md:px-5
@@ -37,12 +52,14 @@ function Body() {
               <img src={loading} alt='' className='h-4 px-2' />{" "}
               <p className='text-xs text-white'>Searching in progress...</p>
             // </div> */}
-            <div className=' absolute bg-Neutral-700 flex p-1 flex-col justify-start items-center text-left w-full min-h-10 bg-Neutral-700 left-0 mt-30 rounded-md z-3 cursor-pointer'>
+            <div
+              id="historyItems"
+              className=' hidden absolute bg-Neutral-700 flex p-1 flex-col justify-start items-center text-left w-full min-h-10 bg-Neutral-700 left-0 mt-30 rounded-md z-3 cursor-pointer'>
               <p className=' bg-Neutral-700 w-full py-2 px-2 mx-4 text-xs hover:border-1 hover:bg-Neutral-600 hover:border-Neutral-800 text-white rounded-md'>
-                Searching in progress...
+                Kigali
               </p>
               <p className=' bg-Neutral-700 w-full py-2 px-2 mx-4 text-xs hover:border-1 hover:bg-Neutral-600 hover:border-Neutral-800 text-white rounded-md'>
-                Searching in progress...
+                Canada
               </p>
             </div>
           </div>
