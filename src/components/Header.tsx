@@ -5,22 +5,28 @@ import logo from "../assets/images/logo.svg";
 import unit from "../assets/images/icon-units.svg";
 import dropdown from "../assets/images/icon-dropdown.svg";
 import checkmark from "../assets/images/icon-checkmark.svg";
+import { useState } from "react";
 
 function Header() {
 
-
+    const [isOpen, setIsOpen] = useState(false);
   
+
+
   return (
     <div className='flex justify-between items-center text-center text-white'>
       <div>
         <img src={logo} alt='' className='h-8' />
       </div>
       <div className='relative flex items-center text-center justify-center  bg-Neutral-700 rounded-md cursor-pointer'>
-        <button className=' flex items-center text-center justify-center font-semibold text-xs px-2 py-2 gap-2 cursor-pointer'>
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className=' flex items-center text-center justify-center font-semibold text-xs px-2 py-2 gap-2 cursor-pointer'>
           <img src={unit} alt='' className='h-3' /> Units
           <img src={dropdown} alt='' />
         </button>
-        <div className=' absolute bg-Neutral-800 flex p-1  z-5 flex-col justify-start items-center text-left w-40 min-h-10 border-1 border-Neutral-600 right-0 mr-1 top-0 -translate-y-20 mt-30 rounded-md z-3 cursor-pointer'>
+        <div
+          className={` ${isOpen? "block ": "hidden"}  absolute bg-Neutral-800 flex p-1  z-5 flex-col justify-start items-center text-left w-40 min-h-10 border-1 border-Neutral-600 right-0 mr-1 top-0 -translate-y-20 mt-30 rounded-md z-3 cursor-pointer`}>
           <p className=' bg-Neutral-800 w-full py-2 px-2 mx-4 text-xs text-white rounded-md cursor-default'>
             Switch to Imperial
           </p>

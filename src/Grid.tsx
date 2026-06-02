@@ -6,8 +6,17 @@ import dropdown from "../src/assets/images/icon-dropdown.svg";
 import overcast from "../src/assets/images/icon-overcast.webp";
 import rain from "../src/assets/images/icon-rain.webp";
 import sun from "../src/assets/images/icon-sunny.webp";
+import { useState } from "react";
 
-function Grid() {
+interface GridProps {
+  weatherData?: any;
+  city?: any;
+}
+
+function Grid({ weatherData, city }: GridProps) {
+  const [isOpen, setIsOpen] = useState(false);
+
+
   return (
     <div>
       {/* <div className='flex justify-center items-center text-center mt-15'>
@@ -20,12 +29,12 @@ function Grid() {
           <div className=' relative flex justify-between items-center overflow-hidden rounded-xl'>
             <div className='absolute flex flex-col md:flex-row md:justify-between w-full items-center text-center text-white px-5'>
               <div className='flex flex-col justify-center items-center  text-left'>
-                <p className='text-xl font-semibold'>Berlin, Germany</p>
+                <p className='text-xl font-semibold'>{city.name}, {city.country}</p>
                 <p className='text-xs block'>Tuesday, Aug 5, 2025</p>
               </div>
               <div className='flex justify-center items-center text-center '>
                 <img src={sun} alt='' className='h-20' />
-                <p className='text-7xl font-semibold'> 20&deg;</p>
+                <p className='text-7xl font-semibold'>{weatherData.current.temperature_2m}&deg;</p>
               </div>
             </div>
             <img src={Today} alt='' className='w-full object-cover h-50' />
@@ -145,11 +154,14 @@ function Grid() {
           <div className='flex justify-between text-center text-sm mx-4 pt-5 mb-4'>
             <p className='  '>Hourly forecast</p>
             <div className='relative bg-Neutral-700 rounded-md  cursor-pointer'>
-              <button className='flex justify-center items-center text-center gap-2 px-3 py-1 cursor-pointer'>
+              <button
+                onClick={() => setIsOpen(!isOpen)}
+                className='flex justify-center items-center text-center gap-2 px-3 py-1 cursor-pointer'>
                 Tuesday
                 <img src={dropdown} alt='' className='flex w-4' />
               </button>
-              <div className=' absolute bg-Neutral-800 flex p-1 flex-col justify-start items-center text-left w-40 min-h-10 border-1 border-Neutral-600 right-0 mr-1 top-0 -translate-y-20 mt-30 rounded-md z-3 cursor-pointer'>
+              <div
+                className={` ${isOpen? "block" : "hidden"} absolute bg-Neutral-800 flex p-1 flex-col justify-start items-center text-left w-40 min-h-10 border-1 border-Neutral-600 right-0 mr-1 top-0 -translate-y-20 mt-30 rounded-md z-3 cursor-pointer`}>
                 <p className=' bg-Neutral-800 w-full py-2 px-2 mx-4 text-xs hover:border-1 hover:bg-Neutral-600 hover:border-Neutral-800 text-white rounded-md'>
                   Monday
                 </p>
