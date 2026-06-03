@@ -6,13 +6,12 @@ import unit from "../assets/images/icon-units.svg";
 import dropdown from "../assets/images/icon-dropdown.svg";
 import checkmark from "../assets/images/icon-checkmark.svg";
 import { useState } from "react";
-// import { weatherData } from "../Body";
 
-function Header() {
-
-    const [isOpen, setIsOpen] = useState(false);
-  
-
+interface weatherDataProps {
+  weatherData: any;
+}
+function Header({weatherData}: weatherDataProps) {
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className='flex justify-between items-center text-center text-white'>
@@ -27,7 +26,7 @@ function Header() {
           <img src={dropdown} alt='' />
         </button>
         <div
-          className={` ${isOpen? "block ": "hidden"}  absolute bg-Neutral-800 flex p-1  z-5 flex-col justify-start items-center text-left w-40 min-h-10 border-1 border-Neutral-600 right-0 mr-1 top-0 -translate-y-20 mt-30 rounded-md z-3 cursor-pointer`}>
+          className={` ${isOpen ? "block " : "hidden"}  absolute bg-Neutral-800 flex p-1  z-5 flex-col justify-start items-center text-left w-40 min-h-10 border-1 border-Neutral-600 right-0 mr-1 top-0 -translate-y-20 mt-30 rounded-md z-3 cursor-pointer`}>
           <p className=' bg-Neutral-800 w-full py-2 px-2 mx-4 text-xs text-white rounded-md cursor-default'>
             Switch to Imperial
           </p>

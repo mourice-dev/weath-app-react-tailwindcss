@@ -5,10 +5,15 @@ import Grid from "./Grid";
 import search from "./assets/images/icon-search.svg";
 import loading from "./assets/images/icon-loading.svg";
 
-function Body() {
+interface weatherDataProps {
+  weatherData: any;
+  setWeatherData: React.Dispatch<React.SetStateAction<any>>;
+}
+
+function Body({ weatherData, setWeatherData }: weatherDataProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [location, setLocation] = useState("");
-  const [weatherData, setWeatherData] = useState<any | null>(null);
+
   const [city, setCity] = useState<any | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -27,9 +32,9 @@ function Body() {
       const place = data.results?.[0];
       if (place) {
         setCity({ name: place.name, country: place.country });
-        const response = await fetch(
-          `https://api.open-meteo.com/v1/forecast?latitude=${place.latitude}&longitude=${place.longitude}&current=temperature_2m&timezone=auto`,
-        );
+       const response = await fetch(
+         `https://api.open-meteo.com/v1/forecast?latitude=${place.latitude}&longitude=${place.longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,wind_speed_10m,weather_code&hourly=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto`,
+       );
         const res = await response.json();
         setWeatherData(res);
       }

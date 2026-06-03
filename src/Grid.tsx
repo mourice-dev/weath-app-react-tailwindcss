@@ -1,13 +1,29 @@
 /** @format */
 
 import React from "react";
+import sun from "../src/assets/images/icon-sunny.webp";
+import rain from "../src/assets/images/icon-rain.webp";
+import overcast from "../src/assets/images/icon-overcast.webp";
+import fog from "../src/assets/images/icon-fog.webp";
+import snow from "../src/assets/images/icon-snow.webp";
+import storm from "../src/assets/images/icon-storm.webp";
+import drizzle from "../src/assets/images/icon-drizzle.webp";
+import partlyCloudy from "../src/assets/images/icon-partly-cloudy.webp";
 import Today from "../src/assets/images/bg-today-large.svg";
 import dropdown from "../src/assets/images/icon-dropdown.svg";
-import overcast from "../src/assets/images/icon-overcast.webp";
-import rain from "../src/assets/images/icon-rain.webp";
-import sun from "../src/assets/images/icon-sunny.webp";
 import { useState } from "react";
 
+const getWeatherIcon = (code: number) => {
+  if (code === 0) return sun;
+  if (code >= 1 && code <= 3) return partlyCloudy;
+  if (code === 45 || code === 48) return fog;
+  if (code >= 51 && code <= 55) return drizzle;
+  if (code >= 61 && code <= 65) return rain;
+  if (code >= 71 && code <= 77) return snow;
+  if (code >= 80 && code <= 82) return rain;
+  if (code >= 95 && code <= 99) return storm;
+  return overcast;
+};
 interface GridProps {
   weatherData?: any;
   city?: any;
@@ -40,122 +56,85 @@ function Grid({ weatherData, city }: GridProps) {
                 <p className='text-xs block'>{formDate}</p>
               </div>
               <div className='flex justify-center items-center text-center '>
-                <img src={sun} alt='' className='h-20' />
+                <img
+                  src={getWeatherIcon(weatherData?.current?.weather_code)}
+                  alt=''
+                  className='h-20'
+                />
                 <p className='text-7xl font-semibold'>
-                  {weatherData?.current?.temperature_2m}&deg;
+                  {Math.round(weatherData?.current?.temperature_2m)}&deg;
                 </p>
               </div>
             </div>
             <img src={Today} alt='' className='w-full object-cover h-50' />
           </div>
 
-          <div className=' grid  grid-cols-2 gap-5 md:flex justify-between items-center mt-5 text-white '>
+          <div className=' grid grid-cols-2 gap-5 md:flex justify-between items-center mt-5 text-white '>
             <div className='bg-Neutral-800 border-1 text-left p-2 border-Neutral-600 rounded-xl lg:w-40'>
               <p className='text-xs'>Feels Like</p>
-              <p className='text-2xl mt-3'>18&deg;</p>
+              <p className='text-2xl mt-3'>
+                {Math.round(weatherData?.current?.apparent_temperature)}&deg;
+              </p>
             </div>
             <div className='bg-Neutral-800 border-1 text-left p-2 border-Neutral-600 rounded-xl lg:w-40'>
               <p className='text-xs'>Humidity</p>
-              <p className='text-2xl mt-3'>46%</p>
+              <p className='text-2xl mt-3'>
+                {weatherData?.current?.relative_humidity_2m}%
+              </p>
             </div>
             <div className='bg-Neutral-800 border-1 text-left p-2 border-Neutral-600 rounded-xl lg:w-40'>
               <p className='text-xs'>Wind</p>
-              <p className='text-2xl mt-3'>14 Km/h</p>
+              <p className='text-2xl mt-3'>
+                {weatherData?.current?.wind_speed_10m} Km/h
+              </p>
             </div>
             <div className='bg-Neutral-800 border-1 text-left p-2 border-Neutral-600 rounded-xl lg:w-40'>
-              <p className='text-xs'>Percipition</p>
-              <p className='text-2xl mt-3'>0 mm</p>
+              <p className='text-xs'>Precipitation</p>
+              <p className='text-2xl mt-3'>
+                {weatherData?.current?.precipitation} mm
+              </p>
             </div>
           </div>
           <div className='mt-8'>
             <div className='text-left text-white text-sm mb-4'>
               <p> Daily forecast</p>
             </div>
-            <div className=' grid grid-cols-3 gap-4 md:grid-cols-7  justify-between'>
-              <div className='bg-Neutral-800   border-1 items-center text-center  text-white  border-Neutral-600 rounded-xl'>
-                <p className='text-xs p-2'>Tue</p>
-                <div className='flex justify-center items-center'>
-                  {" "}
-                  <img src={rain} alt='' className='h-10' />
-                </div>
-                <div className='flex justify-between items-center text-center gap-6 px-2  py-3 '>
-                  <p className='text-xs'>20&deg;</p>
+            <div className='grid grid-cols-3 gap-4 md:grid-cols-7 justify-between'>
+              {weatherData?.daily?.time
+                ?.slice(0, 7)
+                .map((timeStr: string, index: number) => {
+                  // Format the date to show "Tue", "Wed", etc.
+                  const dayName = new Date(timeStr).toLocaleDateString(
+                    "en-US",
+                    { weekday: "short" },
+                  );
+                  const weatherCode = weatherData.daily.weather_code[index];
+                  const tempMax = Math.round(
+                    weatherData.daily.temperature_2m_max[index],
+                  );
+                  const tempMin = Math.round(
+                    weatherData.daily.temperature_2m_min[index],
+                  );
 
-                  <p className='text-xs'>14&deg;</p>
-                </div>
-              </div>
-              <div className='bg-Neutral-800   border-1 items-center text-center  text-white  border-Neutral-600 rounded-xl'>
-                <p className='text-xs p-2'>Tue</p>
-                <div className='flex justify-center items-center'>
-                  {" "}
-                  <img src={rain} alt='' className='h-10' />
-                </div>
-                <div className='flex justify-between items-center text-center gap-6 px-2 py-3 '>
-                  <p className='text-xs'>20&deg;</p>
-
-                  <p className='text-xs'>14&deg;</p>
-                </div>
-              </div>{" "}
-              <div className='bg-Neutral-800   border-1 items-center text-center  text-white  border-Neutral-600 rounded-xl'>
-                <p className='text-xs p-2'>Tue</p>
-                <div className='flex justify-center items-center'>
-                  {" "}
-                  <img src={rain} alt='' className='h-10' />
-                </div>
-                <div className='flex justify-between items-center text-center gap-6 px-2 py-3 '>
-                  <p className='text-xs'>20&deg;</p>
-
-                  <p className='text-xs'>14&deg;</p>
-                </div>
-              </div>{" "}
-              <div className='bg-Neutral-800   border-1 items-center text-center  text-white  border-Neutral-600 rounded-xl'>
-                <p className='text-xs p-2'>Tue</p>
-                <div className='flex justify-center items-center'>
-                  {" "}
-                  <img src={rain} alt='' className='h-10' />
-                </div>
-                <div className='flex justify-between items-center text-center gap-6 px-2 py-3 '>
-                  <p className='text-xs'>20&deg;</p>
-
-                  <p className='text-xs'>14&deg;</p>
-                </div>
-              </div>{" "}
-              <div className='bg-Neutral-800   border-1 items-center text-center  text-white  border-Neutral-600 rounded-xl'>
-                <p className='text-xs p-2'>Tue</p>
-                <div className='flex justify-center items-center'>
-                  {" "}
-                  <img src={rain} alt='' className='h-10' />
-                </div>
-                <div className='flex justify-between items-center text-center gap-6 px-2 py-3 '>
-                  <p className='text-xs'>20&deg;</p>
-
-                  <p className='text-xs'>14&deg;</p>
-                </div>
-              </div>{" "}
-              <div className='bg-Neutral-800   border-1 items-center text-center  text-white  border-Neutral-600 rounded-xl'>
-                <p className='text-xs p-2'>Tue</p>
-                <div className='flex justify-center items-center'>
-                  {" "}
-                  <img src={rain} alt='' className='h-10' />
-                </div>
-                <div className='flex justify-between items-center text-center gap-6 px-2 py-3 '>
-                  <p className='text-xs'>20&deg;</p>
-
-                  <p className='text-xs'>14&deg;</p>
-                </div>
-              </div>{" "}
-              <div className='bg-Neutral-800   border-1 items-center text-center  text-white  border-Neutral-600 rounded-xl'>
-                <p className='text-xs p-2'>Tue</p>
-                <div className='flex justify-center items-center'>
-                  {" "}
-                  <img src={rain} alt='' className='h-10' />
-                </div>
-                <div className='flex justify-between items-center text-center gap-6 px-2 py-3 '>
-                  <p className='text-xs'>20&deg;</p>
-
-                  <p className='text-xs'>14&deg;</p>
-                </div>
-              </div>
+                  return (
+                    <div
+                      key={timeStr}
+                      className='bg-Neutral-800 border-1 items-center text-center text-white border-Neutral-600 rounded-xl'>
+                      <p className='text-xs p-2'>{dayName}</p>
+                      <div className='flex justify-center items-center'>
+                        <img
+                          src={getWeatherIcon(weatherCode)}
+                          alt=''
+                          className='h-10'
+                        />
+                      </div>
+                      <div className='flex justify-between items-center text-center gap-6 px-2 py-3 '>
+                        <p className='text-xs'>{tempMax}&deg;</p>
+                        <p className='text-xs text-gray-400'>{tempMin}&deg;</p>
+                      </div>
+                    </div>
+                  );
+                })}
             </div>
           </div>
         </div>
@@ -197,90 +176,34 @@ function Grid({ weatherData, city }: GridProps) {
             </div>
           </div>
           <div className='h-100 overflow-y-auto scrollbar '>
-            <div className=' flex justify-between items-center  mx-4 mt-2 px-3 text-center text-sm  bg-Neutral-700 border-1 border-Neutral-600 h-10 rounded-md '>
-              <div className='flex justify-center items-center text-center gap-1'>
-                <img src={overcast} alt='' className=' h-7' />
-                <p>3 PM</p>
-              </div>
-              <p className='text-sm'>20&deg;</p>
-            </div>
-            <div className=' flex justify-between items-center  mx-4 mt-2 px-3 text-center text-sm  bg-Neutral-700 border-1 border-Neutral-600 h-10 rounded-md '>
-              <div className='flex justify-center items-center text-center gap-1'>
-                <img src={overcast} alt='' className=' h-7' />
-                <p>3 PM</p>
-              </div>
-              <p className='text-sm'>20&deg;</p>
-            </div>{" "}
-            <div className=' flex justify-between items-center  mx-4 mt-2 px-3 text-center text-sm  bg-Neutral-700 border-1 border-Neutral-600 h-10 rounded-md '>
-              <div className='flex justify-center items-center text-center gap-1'>
-                <img src={overcast} alt='' className=' h-7' />
-                <p>3 PM</p>
-              </div>
-              <p className='text-sm'>20&deg;</p>
-            </div>{" "}
-            <div className=' flex justify-between items-center  mx-4 mt-2 px-3 text-center text-sm  bg-Neutral-700 border-1 border-Neutral-600 h-10 rounded-md '>
-              <div className='flex justify-center items-center text-center gap-1'>
-                <img src={overcast} alt='' className=' h-7' />
-                <p>3 PM</p>
-              </div>
-              <p className='text-sm'>20&deg;</p>
-            </div>{" "}
-            <div className=' flex justify-between items-center  mx-4 mt-2 px-3 text-center text-sm  bg-Neutral-700 border-1 border-Neutral-600 h-10 rounded-md '>
-              <div className='flex justify-center items-center text-center gap-1'>
-                <img src={overcast} alt='' className=' h-7' />
-                <p>3 PM</p>
-              </div>
-              <p className='text-sm'>20&deg;</p>
-            </div>{" "}
-            <div className=' flex justify-between items-center  mx-4 mt-2 px-3 text-center text-sm  bg-Neutral-700 border-1 border-Neutral-600 h-10 rounded-md '>
-              <div className='flex justify-center items-center text-center gap-1'>
-                <img src={overcast} alt='' className=' h-7' />
-                <p>3 PM</p>
-              </div>
-              <p className='text-sm'>20&deg;</p>
-            </div>{" "}
-            <div className=' flex justify-between items-center  mx-4 mt-2 px-3 text-center text-sm  bg-Neutral-700 border-1 border-Neutral-600 h-10 rounded-md '>
-              <div className='flex justify-center items-center text-center gap-1'>
-                <img src={overcast} alt='' className=' h-7' />
-                <p>3 PM</p>
-              </div>
-              <p className='text-sm'>20&deg;</p>
-            </div>{" "}
-            <div className=' flex justify-between items-center  mx-4 mt-2 px-3 text-center text-sm  bg-Neutral-700 border-1 border-Neutral-600 h-10 rounded-md '>
-              <div className='flex justify-center items-center text-center gap-1'>
-                <img src={overcast} alt='' className=' h-7' />
-                <p>3 PM</p>
-              </div>
-              <p className='text-sm'>20&deg;</p>
-            </div>{" "}
-            <div className=' flex justify-between items-center  mx-4 mt-2 px-3 text-center text-sm  bg-Neutral-700 border-1 border-Neutral-600 h-10 rounded-md '>
-              <div className='flex justify-center items-center text-center gap-1'>
-                <img src={overcast} alt='' className=' h-7' />
-                <p>3 PM</p>
-              </div>
-              <p className='text-sm'>20&deg;</p>
-            </div>{" "}
-            <div className=' flex justify-between items-center  mx-4 mt-2 px-3 text-center text-sm  bg-Neutral-700 border-1 border-Neutral-600 h-10 rounded-md '>
-              <div className='flex justify-center items-center text-center gap-1'>
-                <img src={overcast} alt='' className=' h-7' />
-                <p>3 PM</p>
-              </div>
-              <p className='text-sm'>20&deg;</p>
-            </div>{" "}
-            <div className=' flex justify-between items-center  mx-4 mt-2 px-3 text-center text-sm  bg-Neutral-700 border-1 border-Neutral-600 h-10 rounded-md '>
-              <div className='flex justify-center items-center text-center gap-1'>
-                <img src={overcast} alt='' className=' h-7' />
-                <p>3 PM</p>
-              </div>
-              <p className='text-sm'>20&deg;</p>
-            </div>{" "}
-            <div className=' flex justify-between items-center  mx-4 mt-2 px-3 text-center text-sm  bg-Neutral-700 border-1 border-Neutral-600 h-10 rounded-md '>
-              <div className='flex justify-center items-center text-center gap-1'>
-                <img src={overcast} alt='' className=' h-7' />
-                <p>3 PM</p>
-              </div>
-              <p className='text-sm'>20&deg;</p>
-            </div>
+            {weatherData?.hourly?.time
+              ?.slice(0, 24)
+              .map((timeStr: string, index: number) => {
+                const hourTime = new Date(timeStr).toLocaleTimeString("en-US", {
+                  hour: "numeric",
+                  hour12: true,
+                });
+                const temp = Math.round(
+                  weatherData.hourly.temperature_2m[index],
+                );
+                const weatherCode = weatherData.hourly.weather_code[index];
+
+                return (
+                  <div
+                    key={timeStr}
+                    className='flex justify-between items-center mx-4 mt-2 px-3 text-center text-sm bg-Neutral-700 border-1 border-Neutral-600 h-10 rounded-md '>
+                    <div className='flex justify-center items-center text-center gap-1'>
+                      <img
+                        src={getWeatherIcon(weatherCode)}
+                        alt=''
+                        className='h-7'
+                      />
+                      <p>{hourTime}</p>
+                    </div>
+                    <p className='text-sm'>{temp}&deg;</p>
+                  </div>
+                );
+              })}
           </div>
         </div>
       </div>
