@@ -10,13 +10,17 @@ function Body() {
   const [location, setLocation] = useState("");
   const [weatherData, setWeatherData] = useState<any | null>(null);
   const [city, setCity] = useState<any | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setLocation(event.target.value);
+
+    
   };
 
   const handleSubmit = async () => {
     setIsOpen(false);
+        setIsLoading(true); 
     try {
       const result = await fetch(
         `https://geocoding-api.open-meteo.com/v1/search?name=${location}&count=10&language=en&format=json`
@@ -26,13 +30,15 @@ function Body() {
       if (place) {
         setCity({ name: place.name, country: place.country });
         const response = await fetch(
-          `https://api.open-meteo.com/v1/forecast?latitude=${place.latitude}&longitude=${place.longitude}&hourly=temperature_2m&timezone=auto`
+          `https://api.open-meteo.com/v1/forecast?latitude=${place.latitude}&longitude=${place.longitude}&current=temperature_2m&timezone=auto`
         );
         const res = await response.json();
         setWeatherData(res);
       }
     } catch (err) {
       console.error(err);
+    } finally {
+       setIsLoading(false); 
     }
   };
 
@@ -69,10 +75,11 @@ function Body() {
                 className='bg-transparent outline-none text-white 
                           placeholder:text-Neutral-300 w-full text-sm'
               />
-              {/* <div className=' absolute flex justify-start items-center text-center w-full h-10 bg-Neutral-700 left-0 mt-23 rounded-md z-3'>
-              <img src={loading} alt='' className='h-4 px-2' />{" "}
-              <p className='text-xs text-white'>Searching in progress...</p>
-            // </div> */}
+              <div
+                className={` ${isLoading? "block": "hidden"} absolute flex justify-start items-center text-center w-full h-10 bg-Neutral-700 left-0 mt-23 rounded-md z-3`}>
+                <img src={loading} alt='' className='h-4 px-2' />{" "}
+                <p className='text-xs text-white'>Searching in progress...</p>
+              </div>
               <div
                 id='historyItems'
                 className={` ${isOpen ? "block" : "hidden"} absolute bg-Neutral-700 flex p-1 flex-col justify-start items-center text-left w-full min-h-10 bg-Neutral-700 left-0 mt-30 rounded-md z-3 cursor-pointer`}>

@@ -19,22 +19,17 @@ function Grid({ weatherData, city }: GridProps) {
 
   return (
     <div>
-      {/* <div className='flex justify-center items-center text-center mt-15'>
-        <p className='text-white text-md font-bold tracking-wide'>
-          No search result found!
-        </p>
-      </div> */}
       <div className='md:grid grid-cols-3 gap-6 mt-7'>
         <div className='flex-col col-span-2'>
           <div className=' relative flex justify-between items-center overflow-hidden rounded-xl'>
             <div className='absolute flex flex-col md:flex-row md:justify-between w-full items-center text-center text-white px-5'>
               <div className='flex flex-col justify-center items-center  text-left'>
-                <p className='text-xl font-semibold'>{city.name}, {city.country}</p>
+                <p className='text-xl font-semibold'>{city?.name}, {city?.country}</p>
                 <p className='text-xs block'>Tuesday, Aug 5, 2025</p>
               </div>
               <div className='flex justify-center items-center text-center '>
                 <img src={sun} alt='' className='h-20' />
-                <p className='text-7xl font-semibold'>{weatherData.current.temperature_2m}&deg;</p>
+                <p className='text-7xl font-semibold'>{weatherData?.current?.temperature_2m}&deg;</p>
               </div>
             </div>
             <img src={Today} alt='' className='w-full object-cover h-50' />
