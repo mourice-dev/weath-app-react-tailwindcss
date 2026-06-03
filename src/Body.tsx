@@ -14,23 +14,21 @@ function Body() {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setLocation(event.target.value);
-
-    
   };
 
   const handleSubmit = async () => {
     setIsOpen(false);
-        setIsLoading(true); 
+    setIsLoading(true);
     try {
       const result = await fetch(
-        `https://geocoding-api.open-meteo.com/v1/search?name=${location}&count=10&language=en&format=json`
+        `https://geocoding-api.open-meteo.com/v1/search?name=${location}&count=10&language=en&format=json`,
       );
       const data = await result.json();
       const place = data.results?.[0];
       if (place) {
         setCity({ name: place.name, country: place.country });
         const response = await fetch(
-          `https://api.open-meteo.com/v1/forecast?latitude=${place.latitude}&longitude=${place.longitude}&current=temperature_2m&timezone=auto`
+          `https://api.open-meteo.com/v1/forecast?latitude=${place.latitude}&longitude=${place.longitude}&current=temperature_2m&timezone=auto`,
         );
         const res = await response.json();
         setWeatherData(res);
@@ -38,10 +36,9 @@ function Body() {
     } catch (err) {
       console.error(err);
     } finally {
-       setIsLoading(false); 
+      setIsLoading(false);
     }
   };
-
 
   return (
     <div className='flex-col justify-center items-center text-center'>
@@ -76,7 +73,7 @@ function Body() {
                           placeholder:text-Neutral-300 w-full text-sm'
               />
               <div
-                className={` ${isLoading? "block": "hidden"} absolute flex justify-start items-center text-center w-full h-10 bg-Neutral-700 left-0 mt-23 rounded-md z-3`}>
+                className={` ${isLoading ? "block" : "hidden"} absolute flex justify-start items-center text-center w-full h-10 bg-Neutral-700 left-0 mt-23 rounded-md z-3`}>
                 <img src={loading} alt='' className='h-4 px-2' />{" "}
                 <p className='text-xs text-white'>Searching in progress...</p>
               </div>

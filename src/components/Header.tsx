@@ -6,6 +6,7 @@ import unit from "../assets/images/icon-units.svg";
 import dropdown from "../assets/images/icon-dropdown.svg";
 import checkmark from "../assets/images/icon-checkmark.svg";
 import { useState } from "react";
+// import { weatherData } from "../Body";
 
 function Header() {
 

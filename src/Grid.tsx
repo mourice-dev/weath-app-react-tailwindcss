@@ -15,7 +15,17 @@ interface GridProps {
 
 function Grid({ weatherData, city }: GridProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const weatherTime =
+    weatherData?.current?.time ?
+      new Date(weatherData.current.time)
+    : new Date();
 
+  const formDate = weatherTime.toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
 
   return (
     <div>
@@ -24,12 +34,16 @@ function Grid({ weatherData, city }: GridProps) {
           <div className=' relative flex justify-between items-center overflow-hidden rounded-xl'>
             <div className='absolute flex flex-col md:flex-row md:justify-between w-full items-center text-center text-white px-5'>
               <div className='flex flex-col justify-center items-center  text-left'>
-                <p className='text-xl font-semibold'>{city?.name}, {city?.country}</p>
-                <p className='text-xs block'>Tuesday, Aug 5, 2025</p>
+                <p className='text-xl font-semibold'>
+                  {city?.name}, {city?.country}
+                </p>
+                <p className='text-xs block'>{formDate}</p>
               </div>
               <div className='flex justify-center items-center text-center '>
                 <img src={sun} alt='' className='h-20' />
-                <p className='text-7xl font-semibold'>{weatherData?.current?.temperature_2m}&deg;</p>
+                <p className='text-7xl font-semibold'>
+                  {weatherData?.current?.temperature_2m}&deg;
+                </p>
               </div>
             </div>
             <img src={Today} alt='' className='w-full object-cover h-50' />
@@ -156,7 +170,7 @@ function Grid({ weatherData, city }: GridProps) {
                 <img src={dropdown} alt='' className='flex w-4' />
               </button>
               <div
-                className={` ${isOpen? "block" : "hidden"} absolute bg-Neutral-800 flex p-1 flex-col justify-start items-center text-left w-40 min-h-10 border-1 border-Neutral-600 right-0 mr-1 top-0 -translate-y-20 mt-30 rounded-md z-3 cursor-pointer`}>
+                className={` ${isOpen ? "block" : "hidden"} absolute bg-Neutral-800 flex p-1 flex-col justify-start items-center text-left w-40 min-h-10 border-1 border-Neutral-600 right-0 mr-1 top-0 -translate-y-20 mt-30 rounded-md z-3 cursor-pointer`}>
                 <p className=' bg-Neutral-800 w-full py-2 px-2 mx-4 text-xs hover:border-1 hover:bg-Neutral-600 hover:border-Neutral-800 text-white rounded-md'>
                   Monday
                 </p>
