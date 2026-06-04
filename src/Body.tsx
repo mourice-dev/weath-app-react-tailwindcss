@@ -1,4 +1,5 @@
 /** @format */
+/** @format */
 
 import React, { useEffect, useState } from "react";
 import Grid from "./Grid";
@@ -8,18 +9,50 @@ import loading from "./assets/images/icon-loading.svg";
 interface weatherDataProps {
   weatherData: any;
   setWeatherData: React.Dispatch<React.SetStateAction<any>>;
+  city: any;
+  setCity: React.Dispatch<React.SetStateAction<any>>;
+  tempUnit: "celsius" | "fahrenheit";
+  windUnit: "kmh" | "mph";
+  precipUnit: "mm" | "inch";
 }
 
-function Body({ weatherData, setWeatherData }: weatherDataProps) {
+function Body({
+  weatherData,
+  setWeatherData,
+  city,
+  setCity,
+  tempUnit,
+  windUnit,
+  precipUnit,
+}: weatherDataProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [location, setLocation] = useState("");
-
-  const [city, setCity] = useState<any | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setLocation(event.target.value);
   };
+
+  // Re-fetch weather forecast whenever city coordinates or selected units change
+  useEffect(() => {
+    if (city && city.latitude && city.longitude) {
+      const fetchWeatherData = async () => {
+        setIsLoading(true);
+        try {
+          const response = await fetch(
+            `https://api.open-meteo.com/v1/forecast?latitude=${city.latitude}&longitude=${city.longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,wind_speed_10m,weather_code&hourly=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto&temperature_unit=${tempUnit}&wind_speed_unit=${windUnit}&precipitation_unit=${precipUnit}`,
+          );
+          const res = await response.json();
+          setWeatherData(res);
+        } catch (err) {
+          console.error(err);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      fetchWeatherData();
+    }
+  }, [city, tempUnit, windUnit, precipUnit, setWeatherData]);
 
   const handleSubmit = async () => {
     setIsOpen(false);
@@ -31,12 +64,15 @@ function Body({ weatherData, setWeatherData }: weatherDataProps) {
       const data = await result.json();
       const place = data.results?.[0];
       if (place) {
-        setCity({ name: place.name, country: place.country });
-       const response = await fetch(
-         `https://api.open-meteo.com/v1/forecast?latitude=${place.latitude}&longitude=${place.longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,wind_speed_10m,weather_code&hourly=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto`,
-       );
-        const res = await response.json();
-        setWeatherData(res);
+        setCity({
+          name: place.name,
+          country: place.country,
+          latitude: place.latitude,
+          longitude: place.longitude,
+        });
+      } else {
+        setCity(null);
+        setWeatherData(null);
       }
     } catch (err) {
       console.error(err);
@@ -95,11 +131,9 @@ function Body({ weatherData, setWeatherData }: weatherDataProps) {
             </div>
 
             <div
-              className='bg-blue-500 rounded-md text-white cursor-pointer mt-3 md:mt-0
-           
-          '>
+              className='bg-blue-500 rounded-md text-white cursor-pointer mt-3 md:mt-0'>
               <button
-                className='text-sm py-2 px-3 cursor-pointer '
+                className='text-sm py-2 px-3 cursor-pointer'
                 onClick={handleSubmit}>
                 Search
               </button>
