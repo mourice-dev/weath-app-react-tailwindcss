@@ -140,7 +140,7 @@ function Body({
                 onChange={handleChange}
                 value={location}
                 type='text'
-                autoComplete="off"
+                autoComplete='off'
                 placeholder='Search for a place...'
                 id='searchItem'
                 className='bg-transparent outline-none text-white 
@@ -156,7 +156,7 @@ function Body({
               {isOpen && history.length > 0 && (
                 <div
                   id='historyItems'
-                  className='absolute bg-Neutral-700 flex p-1 flex-col justify-start items-center text-left w-full min-h-10 left-0 mt-30 rounded-md z-3 cursor-pointer'
+                  className='absolute bg-Neutral-700 flex p-1 flex-col justify-start items-center text-left w-full min-h-10 left-0 top-full mt-2 rounded-md z-3 cursor-pointer'
                   onMouseLeave={() => setIsOpen(false)} // Hides history if mouse leaves container
                 >
                   {history.map((item, index) => (
