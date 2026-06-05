@@ -62,7 +62,8 @@ function Grid({ weatherData, city }: GridProps) {
                   className='h-20'
                 />
                 <p className='text-7xl font-semibold'>
-                  {Math.round(weatherData?.current?.temperature_2m)}&deg;
+                  {Math.round(weatherData?.current?.temperature_2m)}
+                  {weatherData?.current_units?.temperature_2m || "°"}
                 </p>
               </div>
             </div>
@@ -73,7 +74,8 @@ function Grid({ weatherData, city }: GridProps) {
             <div className='bg-Neutral-800 border-1 text-left p-2 border-Neutral-600 rounded-xl lg:w-40'>
               <p className='text-xs'>Feels Like</p>
               <p className='text-2xl mt-3'>
-                {Math.round(weatherData?.current?.apparent_temperature)}&deg;
+                {Math.round(weatherData?.current?.apparent_temperature)}
+                {weatherData?.current_units?.apparent_temperature || "°"}
               </p>
             </div>
             <div className='bg-Neutral-800 border-1 text-left p-2 border-Neutral-600 rounded-xl lg:w-40'>
@@ -85,13 +87,15 @@ function Grid({ weatherData, city }: GridProps) {
             <div className='bg-Neutral-800 border-1 text-left p-2 border-Neutral-600 rounded-xl lg:w-40'>
               <p className='text-xs'>Wind</p>
               <p className='text-2xl mt-3'>
-                {weatherData?.current?.wind_speed_10m} Km/h
+                {weatherData?.current?.wind_speed_10m}{" "}
+                {weatherData?.current_units?.wind_speed_10m}
               </p>
             </div>
             <div className='bg-Neutral-800 border-1 text-left p-2 border-Neutral-600 rounded-xl lg:w-40'>
               <p className='text-xs'>Precipitation</p>
               <p className='text-2xl mt-3'>
-                {weatherData?.current?.precipitation} mm
+                {weatherData?.current?.precipitation}{" "}
+                {weatherData?.current_units?.precipitation}
               </p>
             </div>
           </div>
@@ -129,8 +133,14 @@ function Grid({ weatherData, city }: GridProps) {
                         />
                       </div>
                       <div className='flex justify-between items-center text-center gap-6 px-2 py-3 '>
-                        <p className='text-xs'>{tempMax}&deg;</p>
-                        <p className='text-xs text-gray-400'>{tempMin}&deg;</p>
+                        <p className='text-xs'>
+                          {tempMax}
+                          {weatherData?.daily_units?.temperature_2m_max || "°"}
+                        </p>
+                        <p className='text-xs text-gray-400'>
+                          {tempMin}
+                          {weatherData?.daily_units?.temperature_2m_min || "°"}
+                        </p>
                       </div>
                     </div>
                   );
@@ -200,7 +210,10 @@ function Grid({ weatherData, city }: GridProps) {
                       />
                       <p>{hourTime}</p>
                     </div>
-                    <p className='text-sm'>{temp}&deg;</p>
+                    <p className='text-sm'>
+                      {temp}
+                      {weatherData?.hourly_units?.temperature_2m || "°"}
+                    </p>
                   </div>
                 );
               })}
